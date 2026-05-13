@@ -129,7 +129,7 @@ class JudgeRequest(BaseModel):
     device_id: str
     era_id: str
     item_id: str
-    plan: str = Field(..., min_length=1, max_length=600)
+    plan: str = Field(..., min_length=1, max_length=300)
 
 
 class JudgeResponse(BaseModel):
