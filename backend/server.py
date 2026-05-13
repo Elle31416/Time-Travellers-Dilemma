@@ -27,7 +27,7 @@ EMERGENT_LLM_KEY = os.environ["EMERGENT_LLM_KEY"]
 client = AsyncIOMotorClient(MONGO_URL)
 db = client[DB_NAME]
 
-app = FastAPI(title="Time Traveler's Dilemma")
+app = FastAPI(title="Epoch")
 api_router = APIRouter(prefix="/api")
 
 logging.basicConfig(
@@ -242,7 +242,7 @@ Rules:
 # ------------- routes -------------
 @api_router.get("/")
 async def root():
-    return {"message": "Time Traveler's Dilemma API ready."}
+    return {"message": "Epoch API ready."}
 
 
 @api_router.get("/eras")

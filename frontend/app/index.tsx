@@ -88,10 +88,10 @@ export default function EraSelector() {
           {/* Header */}
           <View style={styles.header}>
             <View style={{ flex: 1 }}>
-              <Text style={styles.kicker}>⏳ CHRONICLES OF THE TIME JUDGE</Text>
-              <Text style={styles.title}>Time Traveler's Dilemma</Text>
+              <Text style={styles.kicker}>⭐ RECOMMENDED</Text>
+              <Text style={styles.title}>Epoch</Text>
               <Text style={styles.subtitle}>
-                Pick an era. Pick one item. Survive — if you can.
+                Would you survive the moment that changed everything?
               </Text>
             </View>
             <TouchableOpacity
