@@ -1,0 +1,145 @@
+{
+  "project_name": "Time Traveler's Dilemma",
+  "theme": "DARK",
+  "archetype": "Archetype 5 (Jewel & Luxury) with a Vintage Journal + Sci-Fi Terminal hybrid aesthetic.",
+  "colors": {
+    "background_base": "#110e0a",
+    "surface_card": "#1c1712",
+    "surface_glass": "rgba(28, 23, 18, 0.75)",
+    "primary_brand": "#c8953a",
+    "primary_brand_glow": "rgba(200, 149, 58, 0.4)",
+    "secondary_accent": "#d4c090",
+    "text_primary": "#f2ebda",
+    "text_secondary": "#a6957a",
+    "border_subtle": "rgba(200, 149, 58, 0.25)",
+    "border_active": "#c8953a",
+    "verdict_states": {
+      "LEGENDARY": "#e6b800",
+      "SURVIVED": "#2d7a5b",
+      "BARELY_MADE_IT": "#d9a05b",
+      "PERISHED": "#b35939",
+      "CATASTROPHIC": "#8c2626"
+    }
+  },
+  "typography": {
+    "instructions": "Use @expo-google-fonts/cormorant-garamond for headings and @expo-google-fonts/space-mono for data/terminal elements to create the 'vintage meets tech' vibe.",
+    "fonts": {
+      "headings": "CormorantGaramond_700Bold",
+      "body": "SpaceMono_400Regular",
+      "body_bold": "SpaceMono_700Bold"
+    },
+    "scales": {
+      "h1": { "fontSize": 36, "lineHeight": 40, "letterSpacing": 1, "textTransform": "uppercase" },
+      "h2": { "fontSize": 28, "lineHeight": 34, "letterSpacing": 0.5 },
+      "h3": { "fontSize": 20, "lineHeight": 26 },
+      "body": { "fontSize": 16, "lineHeight": 24 },
+      "small": { "fontSize": 12, "lineHeight": 16, "letterSpacing": 0.5 }
+    }
+  },
+  "spacing_scale": {
+    "xs": 4,
+    "sm": 8,
+    "md": 16,
+    "lg": 24,
+    "xl": 32,
+    "xxl": 48
+  },
+  "ui_components": {
+    "EraCard": {
+      "container": "borderRadius: 12, borderWidth: 1, borderColor: border_subtle, overflow: hidden, backgroundColor: surface_card",
+      "overlay": "Absolute positioned LinearGradient (transparent to #110e0a at bottom) to ensure text readability.",
+      "danger_meter": "Small pill with icon, colored based on 1-9 level (1-3 Green, 4-6 Yellow, 7-9 Red).",
+      "lock_state": "Absolute centered blur view with lock icon for premium eras. Image is heavily darkened."
+    },
+    "ItemPickerCard": {
+      "container": "Square aspect ratio, borderRadius: 8, borderWidth: 1, borderColor: border_subtle, backgroundColor: surface_card, padding: md, alignItems: center, justifyContent: center",
+      "selected_state": "borderColor: primary_brand, backgroundColor: rgba(200, 149, 58, 0.1), shadowColor: primary_brand, shadowRadius: 8",
+      "icon": "Color: primary_brand, size: 32"
+    },
+    "ActionInput": {
+      "container": "minHeight: 150, backgroundColor: surface_card, borderWidth: 1, borderColor: border_subtle, borderRadius: 8, padding: md",
+      "text": "color: text_primary, fontFamily: body, fontSize: 16",
+      "character_counter": "Absolute bottom right, color: text_secondary, fontFamily: body"
+    },
+    "VerdictBadge": {
+      "container": "paddingVertical: 8, paddingHorizontal: 16, borderRadius: 20, borderWidth: 2, alignItems: center",
+      "text": "fontFamily: body_bold, textTransform: uppercase, letterSpacing: 2",
+      "dynamic_styling": "Border and Text color mapped to verdict_states. Shadow/Glow effect matching the color."
+    },
+    "PrimaryButton": {
+      "container": "backgroundColor: transparent, borderWidth: 1, borderColor: primary_brand, borderRadius: 8, paddingVertical: 16, alignItems: center",
+      "text": "color: primary_brand, fontFamily: body_bold, fontSize: 16, textTransform: uppercase, letterSpacing: 2",
+      "disabled_state": "opacity: 0.5, borderColor: text_secondary"
+    }
+  },
+  "animations": {
+    "library": "react-native-reanimated",
+    "era_card_entrance": "FadeInUp.delay(index * 100).springify()",
+    "item_selection": "withSpring(scale 1.05) on select",
+    "loading_state": "withRepeat(withSequence(withTiming(0.4), withTiming(1)), -1, true) for glowing text 'The Time Judge Deliberates...'",
+    "verdict_reveal": "ZoomIn.duration(800).springify() for Badge; Animated Number for Score ticking from 0 to final score."
+  },
+  "icons": {
+    "library": "@expo/vector-icons",
+    "mapping": {
+      "Lighter": "flame-outline (Ionicons)",
+      "Smartphone": "phone-portrait-outline (Ionicons)",
+      "Ancient Map": "map-outline (Ionicons)",
+      "Swiss Knife": "construct-outline (Ionicons)",
+      "Antibiotics": "medkit-outline (Ionicons)",
+      "Gold Coin": "cash-outline (Ionicons)",
+      "Compass": "compass-outline (Ionicons)",
+      "History Book": "book-outline (Ionicons)",
+      "Danger": "warning-outline (Ionicons)",
+      "Lock": "lock-closed (Ionicons)",
+      "History/Stats": "time-outline (Ionicons)"
+    }
+  },
+  "screen_layouts": {
+    "Home_EraSelector": {
+      "layout": "Vertical ScrollView. Top header with app title. Grid or horizontal list of EraCards. Section for 'Free Eras' and 'Premium Eras'.",
+      "background": "ImageBackground with bg_leather texture, very dark overlay."
+    },
+    "ItemPicker": {
+      "layout": "Vertical layout. Top: Era Image + Title + Scenario Teaser. Middle: 4x2 Grid of ItemPickerCards. Bottom: PrimaryButton 'Enter Time Stream'.",
+      "background": "Solid background_base."
+    },
+    "ActionInput": {
+      "layout": "KeyboardAvoidingView. Top: Selected Item summary. Middle: Large multiline TextInput with counter. Bottom: Submit Button.",
+      "background": "Solid background_base."
+    },
+    "VerdictScreen": {
+      "layout": "Centered dramatic reveal. Top: Animated VerdictBadge. Middle: Large ticking Score (e.g. 85/100). Text block for 'Time Judge Narrative' and 'Historical Twist'. Bottom: Stack of 'Play Again' and 'View Logs' buttons.",
+      "background": "ImageBackground of the Era, heavily blurred and darkened."
+    },
+    "HistoryStats": {
+      "layout": "Vertical ScrollView. Top: Bento box stats (Games Played, Survival Rate, Highest Score). Bottom: List of past attempts. Each row shows Era, Date, Score, and a left border color-coded by verdict.",
+      "background": "Solid background_base."
+    }
+  },
+  "media": {
+    "instructions": "Use these Unsplash URLs for the Era cards and Backgrounds. Do NOT use placeholders.",
+    "backgrounds": {
+      "leather_texture": "https://images.unsplash.com/photo-1755541608110-3440a0f168ed?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA4Mzl8MHwxfHNlYXJjaHwyfHxkYXJrJTIwbGVhdGhlciUyMHRleHR1cmUlMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc3ODY1MDg0M3ww&ixlib=rb-4.1.0&q=85"
+    },
+    "era_images": {
+      "Roman_Empire_44BC": "https://images.unsplash.com/photo-1754399277311-57e1824cedd7?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzV8MHwxfHNlYXJjaHwzfHxhbmNpZW50JTIwcm9tZSUyMGNvbG9zc2V1bSUyMGRhcmt8ZW58MHx8fHwxNzc4NjUwODM3fDA&ixlib=rb-4.1.0&q=85",
+      "Titanic_1912": "https://images.unsplash.com/photo-1771774469675-ef7d3a3241ce?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHwyfHx0aXRhbmljJTIwc2hpcCUyMG9jZWFuJTIwbmlnaHR8ZW58MHx8fHwxNzc4NjUwODM3fDA&ixlib=rb-4.1.0&q=85",
+      "Moon_Landing_1969": "https://images.unsplash.com/photo-1614726365930-627c75da663e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODF8MHwxfHNlYXJjaHwxfHxtb29uJTIwbGFuZGluZyUyMGFwb2xsbyUyMHNwYWNlfGVufDB8fHx8MTc3ODY1MDgzN3ww&ixlib=rb-4.1.0&q=85",
+      "Pompeii_79AD": "https://images.unsplash.com/photo-1760726289563-cb46e60c1232?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwxfHx2b2xjYW5vJTIwZXJ1cHRpb24lMjBkYXJrJTIwbmlnaHR8ZW58MHx8fHwxNzc4NjUwODQzfDA&ixlib=rb-4.1.0&q=85",
+      "WW2_DDay_1944": "https://images.unsplash.com/photo-1682704589331-3b332a770f60?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzF8MHwxfHNlYXJjaHwxfHxzdG9ybXklMjBvY2VhbiUyMHdhdmVzJTIwZC1kYXl8ZW58MHx8fHwxNzc4NjUwODQzfDA&ixlib=rb-4.1.0&q=85",
+      "Mars_Colony_2050": "https://images.unsplash.com/photo-1758269636418-9794f2f4f598?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzh8MHwxfHNlYXJjaHwxfHxtYXJzJTIwc3VyZmFjZSUyMHJlZCUyMGdsb3dpbmd8ZW58MHx8fHwxNzc4NjUwODQzfDA&ixlib=rb-4.1.0&q=85"
+    }
+  },
+  "testing_requirements": {
+    "instructions": "All interactive and key informational elements MUST include a 'data-testid' (or 'testID' in React Native) attribute. E.g., testID='era-card-roman', testID='item-picker-submit'."
+  },
+  "instructions_to_main_agent": [
+    "Initialize React Native Expo app with reanimated and vector-icons.",
+    "Implement the provided color palette in a theme configuration or stylesheet object.",
+    "Load Cormorant Garamond and Space Mono via @expo-google-fonts.",
+    "Use testID properties extensively across all Touchables, Inputs, and crucial text displays.",
+    "Follow the Archetype 5 design rules: focus on contrast, dark mode dominance, and high-end texture. No neon out of place, rely on the gold/amber colors.",
+    "Use 'react-native-reanimated' for the verdict reveal and score ticking."
+  ]
+}
