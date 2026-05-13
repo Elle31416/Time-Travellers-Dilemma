@@ -1,0 +1,78 @@
+{
+  "summary": "Tested Time Traveler's Dilemma MVP. Backend GET /eras, /items and POST /judge validation work. Frontend Home -> Picker -> Action flow works end-to-end (era cards, locked tap blocked, item select, enter button, plan input + counter, history screen). BLOCKER: EMERGENT_LLM_KEY budget is exhausted ('Budget has been exceeded! Current cost: 0.004473, Max budget: 0.001'), so POST /api/judge fails with 502 and the verdict screen / history population cannot be exercised.",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "POST /api/judge",
+        "issue": "LLM call fails with litellm.BadRequestError: 'Budget has been exceeded! Current cost: 0.004473, Max budget: 0.001'. Backend returns 502 'Time stream unstable'. Root cause is the EMERGENT_LLM_KEY in /app/backend/.env has a hard $0.001 budget cap that is already over. This blocks the entire happy path (no game records can be created, so /games, /stats, DELETE all observe empty data).",
+        "priority": "CRITICAL"
+      }
+    ],
+    "minor": [
+      {
+        "endpoint": "POST /api/judge",
+        "issue": "Pydantic model JudgeRequest allows plan up to 600 chars, but frontend action.tsx hard-caps at MAX=300. Either align constants or expose MAX to the UI from one source."
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "Submit plan -> Verdict",
+        "issue": "Cannot be fully verified because backend /api/judge currently 502s due to LLM key budget. UI will show 'The time stream is unstable. Try again.' error toast (verified path exists in action.tsx).",
+        "affected_testIDs": ["submit-plan", "verdict-badge", "score-meter", "play-again", "view-logs"]
+      }
+    ],
+    "design_issues": [
+      {
+        "screen": "Picker",
+        "issues": [
+          "Several 'shadow* style props are deprecated. Use boxShadow' console warnings - not user-facing but worth migrating styles (theme uses shadowColor/shadowOpacity/shadowRadius on cellSelected etc.)."
+        ]
+      },
+      {
+        "screen": "Action",
+        "issues": [
+          "TouchableWithoutFeedback is deprecated warning. Consider Pressable."
+        ]
+      }
+    ],
+    "react_native_issues": [
+      {
+        "component": "EraCard (index.tsx)",
+        "issue": "Uses pointerEvents prop on <View>; React Native Web warns props.pointerEvents is deprecated, use style.pointerEvents. Cosmetic warning only."
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_ttd_api.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "CRITICAL: Refresh/raise the EMERGENT_LLM_KEY budget or provision a new key. The current key in /app/backend/.env returns LiteLLM BudgetExceeded. Without it the entire AI judgment flow is broken (502).",
+    "Decide canonical max plan length - backend allows 600, frontend caps at 300. Recommend matching to 300 on both or 600 on both.",
+    "Optional: migrate shadow* props to boxShadow on web target, swap TouchableWithoutFeedback for Pressable, move pointerEvents to style to silence deprecation warnings.",
+    "After LLM key is fixed, re-run /app/backend/tests/test_ttd_api.py to verify TestJudge.test_judge_happy_path and the games/stats/delete suite pass."
+  ],
+  "critical_code_review_comments": [
+    "server.py /api/games and /api/stats correctly exclude mongo _id via projection {_id:0}. /api/judge response uses JudgeResponse model so no _id leak. Good.",
+    "Frontend uses process.env.EXPO_PUBLIC_BACKEND_URL via /app/frontend/.env - consistent with Expo public env var conventions.",
+    "GameProvider context state is reset on home mount which is correct. Picker and Action guard against missing era/item by redirecting to / - good.",
+    "Backend uses HTTPException 400 for invalid era/item ids (verified)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_ttd_api.py (new)",
+    "/app/test_reports/iteration_1.json (new)",
+    "/app/test_reports/pytest/pytest_results.xml (new)"
+  ],
+  "success_rate": {
+    "backend": "50% (4/8 - all non-LLM endpoints pass; 4 failures all caused by single LLM budget issue)",
+    "frontend": "~90% (Home, Picker, Action, History screens render and navigate; verdict screen blocked by backend LLM failure)"
+  },
+  "seed_data_creation": "None (tests use ephemeral TEST_<uuid> device_id and clean up after themselves).",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Run with: `export $(grep -v '^#' /app/frontend/.env | xargs -d '\\n') && pytest /app/backend/tests/test_ttd_api.py -v`. The four currently-failing tests will go green automatically once EMERGENT_LLM_KEY budget is fixed. For UI re-verification, run a fresh playwright session: Home -> tap era-card-roman -> tap item-card-compass -> enter-time-stream -> type plan -> submit-plan -> wait 10-15s for verdict screen with verdict-badge / score-meter -> tap view-logs -> assert history row appears -> history-clear should now be visible.",
+  "rca_of_issue": "EMERGENT_LLM_KEY sk-emergent-7B778234b60D23f52A is throttled by upstream LiteLLM proxy with a per-key budget of $0.001 which is already exceeded. Backend correctly surfaces this as HTTP 502 'Time stream unstable: ... Budget has been exceeded'. Reproduction: `curl -X POST $EXPO_PUBLIC_BACKEND_URL/api/judge -H 'Content-Type: application/json' -d '{\"device_id\":\"x\",\"era_id\":\"moon\",\"item_id\":\"compass\",\"plan\":\"test\"}'`. Mitigation: replace/extend the EMERGENT_LLM_KEY in /app/backend/.env, then `sudo supervisorctl restart backend`. No code change needed."
+}

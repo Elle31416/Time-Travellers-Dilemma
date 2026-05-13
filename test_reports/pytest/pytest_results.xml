@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="8" time="1.208" timestamp="2026-05-13T05:55:42.446939+00:00" hostname="agent-env-b50d0771-3f7a-4258-924b-8a06c9439e73"><testcase classname="backend.tests.test_ttd_api.TestEras" name="test_list_eras" time="0.253" /><testcase classname="backend.tests.test_ttd_api.TestItems" name="test_list_items" time="0.045" /><testcase classname="backend.tests.test_ttd_api.TestJudge" name="test_judge_happy_path" time="0.555"><failure message="AssertionError: {&quot;detail&quot;:&quot;Time stream unstable: Failed to generate chat completion: litellm.BadRequestError: OpenAIException - Budget has been exceeded! Current cost: 0.004473, Max budget: 0.001&quot;}&#10;assert 502 == 200&#10; +  where 502 = &lt;Response [502]&gt;.status_code">backend/tests/test_ttd_api.py:64: in test_judge_happy_path
+    assert r.status_code == 200, r.text
+E   AssertionError: {"detail":"Time stream unstable: Failed to generate chat completion: litellm.BadRequestError: OpenAIException - Budget has been exceeded! Current cost: 0.004473, Max budget: 0.001"}
+E   assert 502 == 200
+E    +  where 502 = &lt;Response [502]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_ttd_api.TestJudge" name="test_judge_invalid_era" time="0.043" /><testcase classname="backend.tests.test_ttd_api.TestJudge" name="test_judge_invalid_item" time="0.043" /><testcase classname="backend.tests.test_ttd_api.TestGamesStats" name="test_games_listed_and_sorted" time="0.047"><failure message="assert 0 &gt;= 1&#10; +  where 0 = len([])">backend/tests/test_ttd_api.py:107: in test_games_listed_and_sorted
+    assert len(games) &gt;= 1
+E   assert 0 &gt;= 1
+E    +  where 0 = len([])</failure></testcase><testcase classname="backend.tests.test_ttd_api.TestGamesStats" name="test_stats" time="0.044"><failure message="assert 0 &gt;= 1">backend/tests/test_ttd_api.py:121: in test_stats
+    assert s["total_games"] &gt;= 1
+E   assert 0 &gt;= 1</failure></testcase><testcase classname="backend.tests.test_ttd_api.TestGamesStats" name="test_delete_games" time="0.094"><failure message="AssertionError: assert ('deleted' in {'deleted': 0} and 0 &gt;= 1)">backend/tests/test_ttd_api.py:127: in test_delete_games
+    assert "deleted" in body and body["deleted"] &gt;= 1
+E   AssertionError: assert ('deleted' in {'deleted': 0} and 0 &gt;= 1)</failure></testcase></testsuite></testsuites>
